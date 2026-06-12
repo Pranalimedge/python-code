@@ -1,5 +1,42 @@
-Q-1....
+#Q-1....
 x = 42
 print("Value:", x)
 print("Type:", type(x))
 print("Memory Address:", id(x))
+
+#Q-2..
+a = 10
+b = 10
+print(id(a), id(b))  
+a = [10]
+b = [10]
+print(id(a), id(b)) 
+
+#Q-4..
+import sys
+print(sys.getsizeof(10))       # Size of integer
+print(sys.getsizeof("hello"))  # Size of string
+
+#Q-6...
+x = int(input("Enter first number: "))
+y = int(input("Enter second number: "))
+print("Addition:", x + y)
+print("Subtraction:", x - y)
+print("Multiplication:", x * y)
+print("Division:", x / y)
+
+#Q-7..
+num = input("Enter number: ")
+print(type(num))     
+num = int(num)
+print(type(num))     
+
+#Q-9..
+name = input("Enter your name: ")
+age = int(input("Enter your age: "))
+print(f"Hello {name}, you will turn {age+1} next year.")
+
+#Q-10..
+print("10" + "20")  
+print(10 + 20)      
+
