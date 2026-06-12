@@ -1,0 +1,5 @@
+Q-1....
+x = 42
+print("Value:", x)
+print("Type:", type(x))
+print("Memory Address:", id(x))
