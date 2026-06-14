@@ -1,3 +1,4 @@
+Q-6 dynamically typed code
 x = 10               
 print(x, type(x))
 
@@ -28,4 +29,8 @@ print(x, type(x))
 x = True              
 print(x, type(x))
 
+
+Q-8 Indentation code
+print("hello")         ........right
+  print("hello")      .........Indentation error
 
