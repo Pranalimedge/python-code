@@ -1,10 +1,10 @@
-#Q-1....
+#Q-1....display value,type,memory address
 x = 42
 print("Value:", x)
 print("Type:", type(x))
 print("Memory Address:", id(x))
 
-#Q-2..
+#Q-2..difference
 a = 10
 b = 10
 print(id(a), id(b))  
@@ -12,12 +12,13 @@ a = [10]
 b = [10]
 print(id(a), id(b)) 
 
-#Q-4..
-import sys
-print(sys.getsizeof(10))       # Size of integer
-print(sys.getsizeof("hello"))  # Size of string
+#Q-4..sizeof()
+x=10
+print(x._sizeof_(),"bytes") # Size of integer
+y="hi"
+print(y._sizeof_(),"bytes")  # Size of string
 
-#Q-6...
+#Q-6...addition
 x = int(input("Enter first number: "))
 y = int(input("Enter second number: "))
 print("Addition:", x + y)
@@ -25,13 +26,13 @@ print("Subtraction:", x - y)
 print("Multiplication:", x * y)
 print("Division:", x / y)
 
-#Q-7..
+#Q-7..input()function
 num = input("Enter number: ")
 print(type(num))     
 num = int(num)
 print(type(num))     
 
-#Q-9..
+#Q-9..display age
 name = input("Enter your name: ")
 age = int(input("Enter your age: "))
 print(f"Hello {name}, you will turn {age+1} next year.")
