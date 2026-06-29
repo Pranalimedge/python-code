@@ -1,0 +1,42 @@
+# def display():
+#     print("jay ganesh")
+# display()
+
+# ----------------------------------------------------------
+# def chkgreater(n1,n2):
+    
+#     if n1<n2:
+#         print("n2 is greater number")
+#     else:
+#         print("n1 is not grater")
+# chkgreater(10,20)
+
+#-------------------------------------------------------------------
+#square root of a number
+
+# from math import sqrt
+# def demo(a):
+#     print(sqrt(a))
+# demo(5)
+# --------------------------------------------------------------
+#square of number
+
+# def demo(a):
+#     print(a*a)
+# demo(5)
+#------------------------------------------------------------------
+#cube of a number
+
+# def demo(a):
+#     print(a*a*a)
+# demo(5)
+
+#--------------------------------------------------------------
+#divisible by 3 and 5
+
+def demo(a):
+    if a/3 and a/5:
+        print("divisible ")
+    else:
+        print("not divisible")
+demo(15)
