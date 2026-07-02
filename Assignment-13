@@ -1,0 +1,55 @@
+## 1. Area of Rectangle
+
+length = int(input("Enter length: "))
+width = int(input("Enter width: "))
+
+area = length * width
+print("Area =", area)
+
+#-----------------------------------------------
+
+## Area of circle
+
+radius = int(input("Enter radius: "))
+
+area = 3.14 * radius * radius
+print("Area =", area)
+
+#----------------------------------------------------
+
+## Check Perfect Number
+
+n = int(input("Enter a number: "))
+sum = 0
+
+for i in range(1, n):
+    if n % i == 0:
+        sum += i
+
+if sum == n:
+    print("Perfect Number")
+else:
+    print("Not Perfect Number")
+
+#----------------------------------------------------
+
+## Print Binary Equivalent
+
+n = int(input("Enter a number: "))
+
+print("Binary =", bin(n))
+
+#-------------------------------------------------------
+
+##  Display Grade
+
+marks = int(input("Enter marks: "))
+
+if marks >= 75:
+    print("Distinction")
+elif marks >= 60:
+    print("First Class")
+elif marks >= 50:
+    print("Second Class")
+else:
+    print("Fail")
