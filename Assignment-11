@@ -1,0 +1,68 @@
+##prime number or not
+no = 11
+
+if no <= 1:
+    print("Not a prime number")
+else:
+    for i in range(2, no):
+        if no % i == 0:
+            print("Not a prime number")
+            break
+    else:
+        print("Prime number")
+#-------------------------------------------------------------
+
+##count of digit in that number
+
+n = int(input("Enter a number: "))
+count = 0
+
+while n > 0:
+    count += 1
+    n //= 10
+
+print("Count of digits:", count)
+
+##----------------------------------------------------------------
+
+##sum of digit
+
+n = int(input("Enter a number: "))
+sum = 0
+
+while n > 0:
+    digit = n % 10
+    sum += digit
+    n //= 10
+
+print("Sum of digits:", sum)
+
+##-------------------------------------------------
+
+##reverse a number
+n = int(input("Enter a number: "))
+reverse = 0
+
+while n > 0:
+    digit = n % 10
+    reverse = reverse * 10 + digit
+    n //= 10
+
+print("Reverse:", reverse)
+
+#-----------------------------------------------
+##check palindrome or not
+
+n = int(input("Enter a number: "))
+temp = n
+reverse = 0
+
+while n > 0:
+    digit = n % 10
+    reverse = reverse * 10 + digit
+    n //= 10
+
+if temp == reverse:
+    print("Palindrome")
+else:
+    print("Not Palindrome")
