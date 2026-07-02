@@ -1,0 +1,48 @@
+#vowel or constant
+
+ch = input("Enter a character: ")
+
+if ch in "aeiouAEIOU":
+    print("Vowel")
+else:
+    print("Consonant")
+
+#---------------------------------------------
+
+##factors of a number
+
+n = int(input("Enter a number: "))
+
+for i in range(1, n + 1):
+    if n % i == 0:
+        print(i, end=" ")
+
+#------------------------------------------------------
+
+##Addition, Subtraction, Multiplication and Division
+
+a = int(input("Enter first number: "))
+b = int(input("Enter second number: "))
+
+print("Addition =", a + b)
+print("Subtraction =", a - b)
+print("Multiplication =", a * b)
+print("Division =", a / b)
+
+##------------------------------------------------------------
+
+## Print Numbers from 1 to N
+
+n = int(input("Enter a number: "))
+
+for i in range(1, n + 1):
+    print(i, end=" ")
+
+##------------------------------------------------------------
+
+## Print Numbers from N to 1
+
+n = int(input("Enter a number: "))
+
+for i in range(n, 0, -1):
+    print(i, end=" ") 
