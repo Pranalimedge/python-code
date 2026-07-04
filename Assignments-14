@@ -1,0 +1,130 @@
+## square of a number
+
+demo = lambda a:(a*a) 
+
+def main():
+    a=5
+    print("square of a number is:",demo(a))
+
+if __name__=="__main__":
+    main()
+
+#--------------------------------------------------------------------
+
+## cube of a number
+cube= lambda a:(a*a*a)
+
+def main():
+    a=5
+    print("cube is a:",cube(a))
+
+if __name__=="__main__":
+    main()
+
+#--------------------------------------------------------------
+
+## maximun number
+
+demo =lambda no1,no2:no1 if no2<no1 else no2
+
+def main():
+    no1=10
+    no2=15
+    print("maximum number is:",demo(no1,no2))
+    
+
+if __name__=="__main__":
+    main()
+
+#--------------------------------------------------------------
+
+## return minimum number
+
+demo =lambda no1,no2: no1 if no1<no2 else no2
+
+def main():
+    no1=10
+    no2=15
+    print("minimum number is:",demo(no1,no2))
+    
+
+if __name__=="__main__":
+    main()
+
+#------------------------------------------------------
+
+##return true if number is even
+ 
+demo= lambda no:(no%2==0)
+def main():
+    no=16
+    print("the number is even-",demo(no))
+
+if __name__=="__main__":
+    main()
+
+#-------------------------------------------------
+
+## return true if number is odd
+
+demo= lambda no:(no%2!=0)
+def main():
+    no=15
+    print("the number is odd-",demo(no))
+
+if __name__=="__main__":
+    main()
+
+#------------------------------------------------------
+
+# return true if divisible by 5
+
+demo= lambda no:(no%5==0)
+def main():
+    no=16
+    print("the number is divisible-",demo(no))
+
+if __name__=="__main__":
+    main()
+
+#--------------------------------------------------------------
+
+# return addition
+
+demo= lambda no1,no2:(no1+no2)
+def main():
+    no1=15
+    no2=10
+    print("the addition id:-",demo(no1,no2))
+
+if __name__=="__main__":
+    main()
+
+#---------------------------------------------------------------
+
+## return multiplication
+
+demo= lambda no1,no2:(no1*no2)
+def main():
+    no1=5
+    no2=2
+    print("the multiplication id:-",demo(no1,no2))
+
+if __name__=="__main__":
+    main()
+
+#----------------------------------------------------------------
+
+## accept three numbers and return largest number
+
+demo =lambda no1,no2,no3: no1 if no1 >= no2 and no1 >= no3 else (no2 if no2 >= no3 else no3)
+
+def main():
+    no1=10
+    no2=15
+    no3=20
+    print("largest number is:",demo(no1,no2,no3))
+    
+
+if __name__=="__main__":
+    main()
