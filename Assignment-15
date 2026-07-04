@@ -1,0 +1,145 @@
+# ## using map function display square of numbers
+
+demo =lambda no:(no*no)
+
+def main():
+     data=[1,2,3,4,5]
+     mdata=list(map(demo,data))
+     print("even number is:",mdata)
+
+if __name__=="__main__":
+     main()
+
+# #-------------------------------------------------------------
+
+# ## using filter function display even numbers
+
+demo =lambda no:(no%2==0)
+def main():
+     data=[1,2,3,4,5]
+     fdata=list(filter(demo,data))
+     print("even number is:",fdata)
+
+if __name__=="__main__":
+     main()
+
+# #----------------------------------------------------------------
+
+# ## using filter function display odd numbers
+
+demo =lambda no:(no%2!=0)
+
+def main():
+     data=[1,2,3,4,5]
+     fdata=list(filter(demo,data))
+     print("odd number is:",fdata)
+
+if __name__=="__main__":
+     main()
+
+#-------------------------------------------------------------------
+
+# reduce() addition of all elements.
+
+from functools import reduce
+
+demo =lambda no1,no2:(no1+no2)
+
+def main():
+     data=[1,2,3,4,5]
+     rdata=reduce(demo,data)
+     print("Addition is:",rdata)
+
+if __name__=="__main__":
+     main()
+
+#-----------------------------------------------------------
+
+## reduce() maximum number in elements.
+
+from functools import reduce
+demo =lambda no1,no2: no1 if no1 > no2 else no2
+def main():
+    data=[1,2,3,4,5]
+    rdata=reduce(demo,data)
+    print("maximum number is:",rdata)
+
+if __name__=="__main__":
+    main()
+
+#---------------------------------------------------------
+
+## reduce() minimum number in elements.
+
+from functools import reduce
+
+demo =lambda no1,no2: no1 if no1 < no2 else no2
+
+def main():
+    data=[1,2,3,4,5]
+    rdata=reduce(demo,data)
+    print("minimum number is:",rdata)
+
+if __name__=="__main__":
+    main()
+
+#--------------------------------------------------------------
+
+## return list of string having length greater than 5
+
+demo = lambda s: len(s) > 5
+
+def main():
+    data=["asdfgh","reyansh","panu","pari"]
+    fdata=list(filter(demo,data))
+    print("list is:",fdata)
+
+if __name__=="__main__":
+    main()
+
+#------------------------------------------------------------------
+
+##  divisible by 3 and 5
+
+demo = lambda no: no % 3 == 0 and no % 5 == 0
+
+def main():
+    data = [15, 20, 30, 39, 45, 60]
+    fdata = list(filter(demo, data))
+    print("Divisible by both 3 and 5:", fdata)
+
+if __name__ == "__main__":
+    main()
+
+#---------------------------------------------------------------
+
+## return product of all elements
+
+from functools import reduce
+
+demo =lambda no1,no2: no1*no2
+
+def main():
+    data=[1,2,3,4,5]
+    rdata=reduce(demo,data)
+    print("product of all number is:",rdata)
+
+if __name__=="__main__":
+    main()
+
+#-----------------------------------------------------------
+
+## count of even number
+
+demo = lambda no: no % 2 == 0
+
+def main():
+    data = [1, 2, 3, 4, 5]
+    fdata = list(filter(demo, data))
+    print("Even numbers:", fdata)
+    print("Count of even numbers:", len(fdata))
+
+if __name__ == "__main__":
+    main()
+
+
