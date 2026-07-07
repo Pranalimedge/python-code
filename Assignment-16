@@ -1,0 +1,130 @@
+def fun():
+    print("hello from fun")
+
+def main():
+    fun()
+if __name__=="__main__":
+    main()
+#--------------------------------------------------------
+
+#Q-2.even or odd
+
+def chkevn(no):
+    if(no%2==0):
+        print("even number")
+    else:
+        print("odd number")
+
+def main():
+    chkevn(10)
+    chkevn(7)
+
+if __name__=="__main__":
+    main()
+
+#------------------------------------------------------
+
+#Q-3.addition of two numbers
+
+def add(no1,no2):
+    ans=no1+no2
+    print("addition is:",ans)
+def main():
+    add(10,10)
+if __name__=="__main__":
+    main()
+
+#----------------------------------------------------
+
+# Q-4.display marvellous on screen
+
+def demo():
+    for i in range(1,6):
+        print("marvellous")
+demo()
+
+#----------------------------------------------------
+
+# Q-5 display 10 to 1 on screen.
+
+def main():
+    for i in range(10,0,-1):
+        
+        print(i)
+
+if __name__=="__main__":
+    main()
+
+#-----------------------------------------------------
+
+# Q-6 check number is positive,negative or zero
+
+def demo(no):
+    if (no>1):
+        print("positive number")
+    elif(no<-1):
+        print("negative number ")
+    else:
+        print("zero")
+def main():
+    demo(12)
+    demo(-4)
+    demo(0)
+    
+if __name__=="__main__":
+    main()
+
+#------------------------------------------------------------
+
+#Q-7 divisible by 5 return true otherwise false
+
+def div(no):
+    if no % 5 == 0:
+        return True
+    else:
+        return False
+
+def main():
+    print(div(10))
+    print(div(8))
+
+if __name__ == "__main__":
+    main()
+
+
+#------------------------------------------------------
+
+#Q-8 print * on screen
+
+def demo(no):
+    for i in range(5):
+        print("*",end="")
+
+def main():
+    demo(5)
+if __name__=="__main__":
+    main()
+
+#-------------------------------------------------
+# Q-9 first 10 even numbers
+
+def demo(no):
+    for i in range(1, no + 1):
+        if i % 2 == 0:
+            print(i)
+
+def main():
+    demo(20)
+
+if __name__ == "__main__":
+    main()
+
+#--------------------------------------------------------------
+
+#Q-10 length of a name
+
+def main():
+    n1="marvellous info"
+    print(len(n1))
+if __name__=="__main__":
+    main()
