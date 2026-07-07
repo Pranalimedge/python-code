@@ -1,0 +1,97 @@
+# Q-1 Accept N numbers and return the addition of all elements
+
+n = int(input("Enter number of elements: "))
+
+arr = []
+
+for i in range(n):
+    num = int(input("Enter number: "))
+    arr.append(num)
+
+print("Sum =", sum(arr))
+#-----------------------------------------------------------------
+
+#Q-2 Accept N numbers and return Maximum number
+
+n = int(input("Enter number of elements: "))
+
+arr = []
+
+for i in range(n):
+    num = int(input("Enter number: "))
+    arr.append(num)
+
+print("Maximum =", max(arr))
+
+#-----------------------------------------------------------
+
+#Q-3 Accept N numbers and return Minimum number
+
+n = int(input("Enter number of elements: "))
+
+arr = []
+
+for i in range(n):
+    num = int(input("Enter number: "))
+    arr.append(num)
+
+print("Minimum =", min(arr))
+
+#----------------------------------------------------------------
+
+#Q-4 Accept N numbers and return frequency of a given number
+
+n = int(input("Enter number of elements: "))
+
+arr = []
+
+for i in range(n):
+    num = int(input("Enter number: "))
+    arr.append(num)
+
+search = int(input("Enter number to search: "))
+
+count = arr.count(search)
+
+print("Frequency =", count)
+
+#--------------------------------------------------------------
+
+#Q-5 Accept N numbers and return sum of all prime numbers using a module
+
+MarvellousNum.py
+
+def ChkPrime(no):
+    if no < 2:
+        return False
+
+    for i in range(2, int(no**0.5) + 1):
+        if no % i == 0:
+            return False
+
+    return True
+
+main.py
+
+import MarvellousNum
+
+def ListPrime(arr):
+    total = 0
+
+    for i in arr:
+        if MarvellousNum.ChkPrime(i):
+            total += i
+
+    return total
+
+n = int(input("Enter number of elements: "))
+
+arr = []
+
+for i in range(n):
+    num = int(input("Enter number: "))
+    arr.append(num)
+
+ans = ListPrime(arr)
+
+print("Sum of prime numbers =", ans)
