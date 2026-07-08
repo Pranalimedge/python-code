@@ -1,0 +1,133 @@
+import threading
+
+def is_prime(num):
+    if num < 2:
+        return False
+    for i in range(2, int(num ** 0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
+
+def prime(numbers):
+    print("Prime Numbers:")
+    for i in numbers:
+        if is_prime(i):
+            print(i, end=" ")
+    print()
+
+def nonprime(numbers):
+    print("Non-Prime Numbers:")
+    for i in numbers:
+        if not is_prime(i):
+            print(i, end=" ")
+    print()
+
+def main():
+    numbers = list(map(int, input("Enter numbers: ").split()))
+
+    t1 = threading.Thread(target=prime, args=(numbers,))
+    t2 = threading.Thread(target=nonprime, args=(numbers,))
+
+    t1.start()
+    t2.start()
+
+    t1.join()
+    t2.join()
+
+if __name__ == "__main__":
+    main()
+
+#--------------------------------------------------------------------------
+
+# 2. Maximum and Minimum Using Threads
+import threading
+
+def maximum(numbers):
+    print("Maximum =", max(numbers))
+
+def minimum(numbers):
+    print("Minimum =", min(numbers))
+
+def main():
+    numbers = list(map(int, input("Enter numbers: ").split()))
+
+    t1 = threading.Thread(target=maximum, args=(numbers,))
+    t2 = threading.Thread(target=minimum, args=(numbers,))
+
+    t1.start()
+    t2.start()
+
+    t1.join()
+    t2.join()
+
+if __name__ == "__main__":
+    main()
+
+#--------------------------------------------------------------------
+
+# 3. Shared Counter Using Lock
+import threading
+
+counter = 0
+lock = threading.Lock()
+
+def increment():
+    global counter
+    for i in range(100000):
+        with lock:
+            counter += 1
+
+def main():
+    global counter
+
+    t1 = threading.Thread(target=increment)
+    t2 = threading.Thread(target=increment)
+
+    t1.start()
+    t2.start()
+
+    t1.join()
+    t2.join()
+
+    print("Final Counter =", counter)
+
+if __name__ == "__main__":
+    main()
+
+#------------------------------------------------------------
+
+# 4.Sum and Product Using Threads
+import threading
+
+sum_result = 0
+product_result = 1
+
+def find_sum(numbers):
+    global sum_result
+    sum_result = sum(numbers)
+
+def find_product(numbers):
+    global product_result
+    product_result = 1
+    for i in numbers:
+        product_result *= i
+
+def main():
+    global sum_result, product_result
+
+    numbers = list(map(int, input("Enter numbers: ").split()))
+
+    t1 = threading.Thread(target=find_sum, args=(numbers,))
+    t2 = threading.Thread(target=find_product, args=(numbers,))
+
+    t1.start()
+    t2.start()
+
+    t1.join()
+    t2.join()
+
+    print("Sum =", sum_result)
+    print("Product =", product_result)
+
+if __name__ == "__main__":
+    main()
