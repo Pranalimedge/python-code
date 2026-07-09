@@ -1,0 +1,119 @@
+#1.Sum of all Even Numbers from 1 to N using multiprocessing.Pool
+from multiprocessing import Pool
+import os
+
+def even_sum(n):
+    total = (n // 2) * ((n // 2) + 1)
+    print("Process ID :", os.getpid())
+    print("Input Number :", n)
+    print("Sum of Even Numbers :", total)
+    print()
+    return total
+
+if __name__ == "__main__":
+    data = [1000000, 2000000, 3000000, 4000000]
+
+    p = Pool()
+    p.map(even_sum, data)
+
+    p.close()
+    p.join()
+
+#------------------------------------------------
+
+#2.Sum of all Odd Numbers from 1 to N using multiprocessing.Pool
+
+from multiprocessing import Pool
+import os
+
+def odd_sum(n):
+    count = (n + 1) // 2
+    total = count * count
+    print("Process ID :", os.getpid())
+    print("Input Number :", n)
+    print("Sum of Odd Numbers :", total)
+    print()
+    return total
+
+if __name__ == "__main__":
+    data = [1000000, 2000000, 3000000, 4000000]
+
+    p = Pool()
+    p.map(odd_sum, data)
+
+    p.close()
+    p.join()
+
+#----------------------------------------------------
+#3.Count Even Numbers between 1 and N using Pool.map()
+
+from multiprocessing import Pool
+import os
+
+def even_count(n):
+    count = n // 2
+    print("Process ID :", os.getpid())
+    print("Input Number :", n)
+    print("Even Number Count :", count)
+    print()
+    return count
+
+if __name__ == "__main__":
+    data = [1000000, 2000000, 3000000, 4000000]
+
+    p = Pool()
+    p.map(even_count, data)
+
+    p.close()
+    p.join()
+
+#-----------------------------------------------------------
+
+#4.Count Odd Numbers between 1 and N using multiprocessing.Pool
+
+from multiprocessing import Pool
+import os
+
+def odd_count(n):
+    count = (n + 1) // 2
+    print("Process ID :", os.getpid())
+    print("Input Number :", n)
+    print("Odd Number Count :", count)
+    print()
+    return count
+
+if __name__ == "__main__":
+    data = [1000000, 2000000, 3000000, 4000000]
+
+    p = Pool()
+    p.map(odd_count, data)
+
+    p.close()
+    p.join()
+
+#--------------------------------------------------------------
+
+# 5: Calculate Factorials of Multiple Numbers using multiprocessing.Pool
+from multiprocessing import Pool
+import math
+import os
+
+def factorial_number(n):
+    fact = math.factorial(n)
+
+    print("Process ID :", os.getpid())
+    print("Input Number :", n)
+    print("Factorial :", fact)
+    print()
+
+    return fact
+
+if __name__ == "__main__":
+    data = [10, 15, 20, 25]
+
+    p = Pool()
+
+    p.map(factorial_number, data)
+
+    p.close()
+    p.join()
