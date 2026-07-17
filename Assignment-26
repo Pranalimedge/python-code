@@ -1,0 +1,116 @@
+class Demo:
+    Value = 100      # Class variable
+
+    def __init__(self, no1, no2):
+        self.no1 = no1
+        self.no2 = no2
+
+    def Fun(self):
+        print("Fun()")
+        print("No1 =", self.no1)
+        print("No2 =", self.no2)
+
+    def Gun(self):
+        print("Gun()")
+        print("No1 =", self.no1)
+        print("No2 =", self.no2)
+
+
+def main():
+    Obj1 = Demo(11, 21)
+    Obj2 = Demo(51, 101)
+
+    Obj1.Fun()
+    Obj2.Fun()
+    Obj1.Gun()
+    Obj2.Gun()
+
+
+if __name__ == "__main__":
+    main()
+
+#-------------------------------------------------------------------
+
+class Circle:
+    PI = 3.14
+
+    def __init__(self):
+        self.Radius = 0.0
+        self.Area = 0.0
+        self.Circumference = 0.0
+
+    def Accept(self):
+        self.Radius = float(input("Enter Radius : "))
+
+    def CalculateArea(self):
+        self.Area = Circle.PI * self.Radius * self.Radius
+
+    def CalculateCircumference(self):
+        self.Circumference = 2 * Circle.PI * self.Radius
+
+    def Display(self):
+        print("Radius :", self.Radius)
+        print("Area :", self.Area)
+        print("Circumference :", self.Circumference)
+        print()
+
+
+def main():
+    n = int(input("Enter number of circles : "))
+
+    for i in range(n):
+        print("\nCircle", i + 1)
+        obj = Circle()
+        obj.Accept()
+        obj.CalculateArea()
+        obj.CalculateCircumference()
+        obj.Display()
+
+
+if __name__ == "__main__":
+    main()
+
+#-------------------------------------------------------------------------
+
+class Arithmetic:
+
+    def __init__(self):
+        self.Value1 = 0
+        self.Value2 = 0
+
+    def Accept(self):
+        self.Value1 = int(input("Enter First Number : "))
+        self.Value2 = int(input("Enter Second Number : "))
+
+    def Addition(self):
+        return self.Value1 + self.Value2
+
+    def Subtraction(self):
+        return self.Value1 - self.Value2
+
+    def Multiplication(self):
+        return self.Value1 * self.Value2
+
+    def Division(self):
+        if self.Value2 == 0:
+            return "Division by zero is not possible"
+        return self.Value1 / self.Value2
+
+
+def main():
+    n = int(input("Enter number of objects : "))
+
+    for i in range(n):
+        print("\nObject", i + 1)
+        obj = Arithmetic()
+
+        obj.Accept()
+
+        print("Addition :", obj.Addition())
+        print("Subtraction :", obj.Subtraction())
+        print("Multiplication :", obj.Multiplication())
+        print("Division :", obj.Division())
+
+
+if __name__ == "__main__":
+    main()
