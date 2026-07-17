@@ -1,0 +1,134 @@
+class BookStore:
+    NoOfBooks = 0
+
+    def __init__(self, Name, Author):
+        self.Name = Name
+        self.Author = Author
+        BookStore.NoOfBooks += 1
+
+    def Display(self):
+        print(self.Name, "by", self.Author,
+              ". No of books:", BookStore.NoOfBooks)
+
+
+def main():
+    Obj1 = BookStore("Linux System Programming", "Robert Love")
+    Obj1.Display()
+
+    Obj2 = BookStore("C Programming", "Dennis Ritchie")
+    Obj2.Display()
+
+
+if __name__ == "__main__":
+    main()
+
+#--------------------------------------------------------------------
+
+class BankAccount:
+    ROI = 10.5
+
+    def __init__(self, Name, Amount):
+        self.Name = Name
+        self.Amount = Amount
+
+    def Display(self):
+        print("Name :", self.Name)
+        print("Balance :", self.Amount)
+
+    def Deposit(self):
+        money = float(input("Enter deposit amount : "))
+        self.Amount += money
+
+    def Withdraw(self):
+        money = float(input("Enter withdrawal amount : "))
+        if money <= self.Amount:
+            self.Amount -= money
+        else:
+            print("Insufficient Balance")
+
+    def CalculateInterest(self):
+        return (self.Amount * BankAccount.ROI) / 100
+
+
+def main():
+    n = int(input("Enter number of accounts : "))
+
+    for i in range(n):
+        print("\nAccount", i + 1)
+        name = input("Enter Name : ")
+        amount = float(input("Enter Initial Balance : "))
+
+        obj = BankAccount(name, amount)
+
+        obj.Display()
+
+        obj.Deposit()
+        obj.Display()
+
+        obj.Withdraw()
+        obj.Display()
+
+        print("Interest :", obj.CalculateInterest())
+
+
+if __name__ == "__main__":
+    main()
+
+#-----------------------------------------------------------------------------
+
+class Numbers:
+
+    def __init__(self, Value):
+        self.Value = Value
+
+    def ChkPrime(self):
+        if self.Value < 2:
+            return False
+
+        for i in range(2, int(self.Value ** 0.5) + 1):
+            if self.Value % i == 0:
+                return False
+
+        return True
+
+    def ChkPerfect(self):
+        total = 0
+
+        for i in range(1, self.Value):
+            if self.Value % i == 0:
+                total += i
+
+        return total == self.Value
+
+    def Factors(self):
+        print("Factors are :", end=" ")
+        for i in range(1, self.Value + 1):
+            if self.Value % i == 0:
+                print(i, end=" ")
+        print()
+
+    def SumFactors(self):
+        total = 0
+        for i in range(1, self.Value + 1):
+            if self.Value % i == 0:
+                total += i
+        return total
+
+
+def main():
+    n = int(input("Enter number of objects : "))
+
+    for i in range(n):
+        print("\nObject", i + 1)
+        value = int(input("Enter Number : "))
+
+        obj = Numbers(value)
+
+        print("Prime :", obj.ChkPrime())
+        print("Perfect :", obj.ChkPerfect())
+        obj.Factors()
+        print("Sum of Factors :", obj.SumFactors())
+
+
+if __name__ == "__main__":
+    main()
