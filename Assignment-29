@@ -1,0 +1,129 @@
+# ## Q.1) Check File Exists in Current Directory
+
+import os
+
+def CheckFile(filename):
+    return os.path.exists(filename)
+
+def main():
+    filename = input("Enter file name: ")
+
+    if CheckFile(filename):
+        print(filename, "exists.")
+    else:
+        print(filename, "does not exist.")
+
+
+if __name__ == "__main__":
+    main()
+
+#-----------------------------------------------------------
+
+## Q.2) Display File Contents
+
+def DisplayContents(filename):
+    with open(filename, "r") as file:
+        print(file.read())
+
+
+def main():
+    filename = input("Enter file name: ")
+
+    try:
+        DisplayContents(filename)
+    except FileNotFoundError:
+        print("File not found.")
+
+
+if __name__ == "__main__":
+    main()
+#-------------------------------------------------------------
+
+## Q.3) Copy File Contents into a New File (Command Line)
+
+import sys
+
+def CopyFile(source):
+    with open(source, "r") as file1:
+        data = file1.read()
+
+    with open("Demo1.txt", "w") as file2:
+        file2.write(data)
+
+
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python program.py <sourcefile>")
+        return
+
+    try:
+        CopyFile(sys.argv[1])
+        print("Contents copied into Demo1.txt")
+    except FileNotFoundError:
+        print("Source file not found.")
+
+
+if __name__ == "__main__":
+    main()
+
+#----------------------------------------------------------------
+
+## Q.4) Compare Two Files (Command Line)
+
+import sys
+
+def CompareFiles(file1, file2):
+    with open(file1, "r") as f1:
+        data1 = f1.read()
+
+    with open(file2, "r") as f2:
+        data2 = f2.read()
+
+    return data1 == data2
+
+
+def main():
+    if len(sys.argv) != 3:
+        print("Usage: python program.py file1 file2")
+        return
+
+    try:
+        if CompareFiles(sys.argv[1], sys.argv[2]):
+            print("Success")
+        else:
+            print("Failure")
+    except FileNotFoundError:
+        print("One or both files not found.")
+
+
+if __name__ == "__main__":
+    main()
+
+#-----------------------------------------------------------
+
+## Q.5) Frequency of a String in a File
+
+def Frequency(filename, word):
+    count = 0
+
+    with open(filename, "r") as file:
+        for line in file:
+            words = line.split()
+            count += words.count(word)
+
+    return count
+
+
+def main():
+    filename = input("Enter file name: ")
+    word = input("Enter word: ")
+
+    try:
+        result = Frequency(filename, word)
+        print(word, "appears", result, "times in", filename)
+    except FileNotFoundError:
+        print("File not found.")
+
+
+if __name__ == "__main__":
+    main()
