@@ -1,0 +1,130 @@
+## 1.Count Lines in a File
+
+def CountLines(filename):
+    count = 0
+
+    with open(filename, "r") as file:
+        for line in file:
+            count += 1
+
+    return count
+
+
+def main():
+    filename = input("Enter file name: ")
+
+    try:
+        lines = CountLines(filename)
+        print("Total number of lines in", filename, ":", lines)
+    except FileNotFoundError:
+        print("File not found.")
+
+
+if __name__ == "__main__":
+    main()
+
+#------------------------------------------------------------------------
+
+## 2.Count Words in a File
+
+def CountWords(filename):
+    count = 0
+
+    with open(filename, "r") as file:
+        for line in file:
+            words = line.split()
+            count += len(words)
+
+    return count
+
+
+def main():
+    filename = input("Enter file name: ")
+
+    try:
+        words = CountWords(filename)
+        print("Total number of words in", filename, ":", words)
+    except FileNotFoundError:
+        print("File not found.")
+
+
+if __name__ == "__main__":
+    main()
+
+#------------------------------------------------------------
+
+## 3.Display File Line by Line
+
+def DisplayFile(filename):
+    with open(filename, "r") as file:
+        for line in file:
+            print(line, end="")
+
+
+def main():
+    filename = input("Enter file name: ")
+
+    try:
+        DisplayFile(filename)
+    except FileNotFoundError:
+        print("File not found.")
+
+
+if __name__ == "__main__":
+    main()
+
+#------------------------------------------------------------
+
+## 4.Copy File Contents into Another File
+
+def CopyFile(source, destination):
+    with open(source, "r") as file1:
+        data = file1.read()
+
+    with open(destination, "w") as file2:
+        file2.write(data)
+
+
+def main():
+    source = input("Enter source file: ")
+    destination = input("Enter destination file: ")
+
+    try:
+        CopyFile(source, destination)
+        print("Contents of", source, "copied into", destination)
+    except FileNotFoundError:
+        print("Source file not found.")
+
+
+if __name__ == "__main__":
+    main()
+
+#------------------------------------------------------------
+
+## 5.Search a Word in a File
+
+def SearchWord(filename, word):
+    with open(filename, "r") as file:
+        data = file.read()
+
+    if word in data:
+        return True
+    else:
+        return False
+
+
+def main():
+    filename = input("Enter file name: ")
+    word = input("Enter word to search: ")
+
+    try:
+        if SearchWord(filename, word):
+            print(word, "is present in", filename)
+        else:
+            print(word, "is not present in", filename)
+    except FileNotFoundError:
+        print("File not found.")
+
+
+if __name__ == "__main__":
+    main()
