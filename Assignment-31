@@ -1,0 +1,149 @@
+#1. Accept a message and time interval, then display the message repeatedly
+
+import schedule
+import time
+
+message = input("Enter message: ")
+interval = int(input("Enter interval in seconds: "))
+
+if interval <= 0:
+    print("Interval must be greater than zero.")
+    exit()
+
+def Display():
+    print(message)
+
+schedule.every(interval).seconds.do(Display)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+#-------------------------------------------------------------------
+
+# 2. Create DisplayMessage(message) and schedule it
+
+import schedule
+import time
+
+def DisplayMessage(message):
+    print(message)
+
+msg = input("Enter message: ")
+
+schedule.every(5).seconds.do(DisplayMessage, msg)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+#-------------------------------------------------------------------
+
+# 3. Scan a directory every minute
+
+import os
+import schedule
+import time
+from datetime import datetime
+
+path = input("Enter directory path: ")
+
+def ScanDirectory():
+    files = 0
+    folders = 0
+
+    for item in os.listdir(path):
+        fullpath = os.path.join(path, item)
+
+        if os.path.isfile(fullpath):
+            files += 1
+        elif os.path.isdir(fullpath):
+            folders += 1
+
+    print("Directory Scanned :", path)
+    print("Total Files :", files)
+    print("Total Subdirectories :", folders)
+    print("Scan Time :", datetime.now().strftime("%d-%m-%Y %I:%M:%S %p"))
+    print()
+
+schedule.every(1).minutes.do(ScanDirectory)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+#----------------------------------------------------
+
+# 4. Create a new log file every 10 minutes
+
+import schedule
+import time
+from datetime import datetime
+
+def CreateLog():
+    filename = "Marvellous_" + datetime.now().strftime("%d_%m_%Y_%H_%M_%S") + ".txt"
+
+    with open(filename, "w") as file:
+        file.write("Log file created successfully.\n")
+        file.write("Creation Time: ")
+        file.write(datetime.now().strftime("%d-%m-%Y %I:%M:%S %p"))
+
+    print(filename, "created.")
+
+schedule.every(10).minutes.do(CreateLog)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+#---------------------------------------------------------
+
+# 5. Count files in a directory every 5 minutes and save the result
+
+import os
+import schedule
+import time
+from datetime import datetime
+
+path = input("Enter directory path: ")
+
+def CountFiles():
+    count = 0
+
+    for item in os.listdir(path):
+        if os.path.isfile(os.path.join(path, item)):
+            count += 1
+
+    with open("DirectoryCountLog.txt", "a") as file:
+        file.write("Directory : " + path + "\n")
+        file.write("Files : " + str(count) + "\n")
+        file.write("Date & Time : " +
+                   datetime.now().strftime("%d-%m-%Y %I:%M:%S %p") + "\n\n")
+
+    print("Log Updated.")
+
+schedule.every(5).minutes.do(CountFiles)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+#-----------------------------------------------------------------
+
+# 6.Schedule weekly messages
+
+import schedule
+import time
+
+def MondayTask():
+    print("Start your weekly goals")
+
+def FridayTask():
+    print("Wrap up your weekly work")
+
+schedule.every().monday.at("09:00").do(MondayTask)
+schedule.every().friday.at("18:00").do(FridayTask)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
