@@ -1,0 +1,128 @@
+## 1. Print "Jay Ganesh..." every 2 seconds
+
+import schedule
+import time
+
+def Display():
+    print("Jay Ganesh...")
+
+schedule.every(2).seconds.do(Display)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+## 2. Display current date and time every 1 minute
+
+import schedule
+import time
+from datetime import datetime
+
+def CurrentTime():
+    now = datetime.now()
+    print("Current Date and Time :", now.strftime("%d-%m-%Y %I:%M:%S %p"))
+
+schedule.every(1).minutes.do(CurrentTime)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+## 3. Print "Coding Kar..!" every 30 minutes
+
+import schedule
+import time
+
+def Coding():
+    print("Coding Kar..!")
+
+schedule.every(30).minutes.do(Coding)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+## 4. Print "Namskar..." every day at 9:00 AM
+
+import schedule
+import time
+
+def Wish():
+    print("Namskar...")
+
+schedule.every().day.at("09:00").do(Wish)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+## 5. Write current date and time into Marvellous.txt every 5 minutes
+
+import schedule
+import time
+from datetime import datetime
+
+def WriteFile():
+    with open("Marvellous.txt", "a") as f:
+        f.write("Task executed at : ")
+        f.write(datetime.now().strftime("%d-%m-%Y %I:%M:%S %p"))
+        f.write("\n")
+
+schedule.every(5).minutes.do(WriteFile)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+##6. Schedule two tasks
+## Lunch Time! at 1:00 PM
+## Wrap up work at 6:00 PM
+
+import schedule
+import time
+
+def Lunch():
+    print("Lunch Time!")
+
+def WrapUp():
+    print("Wrap up work")
+
+schedule.every().day.at("13:00").do(Lunch)
+schedule.every().day.at("18:00").do(WrapUp)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+## 7. Backup a file every hour
+
+import schedule
+import time
+import shutil
+import os
+from datetime import datetime
+
+source = input("Enter source file path : ")
+destination = input("Enter destination folder path : ")
+
+def Backup():
+    filename = os.path.basename(source)
+    name, ext = os.path.splitext(filename)
+
+    timestamp = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+    newfile = f"{name}_{timestamp}{ext}"
+
+    destfile = os.path.join(destination, newfile)
+
+    shutil.copy(source, destfile)
+
+    with open("backup_log.txt", "a") as log:
+        log.write(f"Backup completed successfully at {datetime.now().strftime('%d-%m-%Y %I:%M:%S %p')}\n")
+
+    print("Backup Created :", newfile)
+
+schedule.every(1).hours.do(Backup)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
