@@ -1,0 +1,184 @@
+import os
+import sys
+import hashlib
+import shutil
+import smtplib
+import schedule
+import time
+from datetime import datetime
+from email.message import EmailMessage
+
+# ------------------- Email Configuration -------------------
+SENDER_EMAIL = "sender@gmail.com"
+SENDER_PASSWORD = "your_app_password"
+
+# ------------------- Help -------------------
+def Help():
+    print("""
+Duplicate File Removal Automation
+
+Usage:
+python DuplicateFileRemoval.py <DirectoryPath> <IntervalInMinutes> <ReceiverEmail>
+
+Example:
+python DuplicateFileRemoval.py E:\\Data\\Demo 50 abc@gmail.com
+""")
+
+# ------------------- Usage -------------------
+def Usage():
+    print("python DuplicateFileRemoval.py <DirectoryPath> <IntervalInMinutes> <ReceiverEmail>")
+
+# ------------------- Checksum -------------------
+def CalculateChecksum(path):
+    h = hashlib.md5()
+
+    with open(path, "rb") as f:
+        while True:
+            data = f.read(4096)
+            if not data:
+                break
+            h.update(data)
+
+    return h.hexdigest()
+
+# ------------------- Duplicate Search -------------------
+def FindDuplicates(directory):
+    duplicate = {}
+    total = 0
+
+    for folder, subfolder, files in os.walk(directory):
+        for file in files:
+            total += 1
+            filepath = os.path.join(folder, file)
+
+            try:
+                checksum = CalculateChecksum(filepath)
+
+                if checksum in duplicate:
+                    duplicate[checksum].append(filepath)
+                else:
+                    duplicate[checksum] = [filepath]
+
+            except:
+                pass
+
+    return duplicate, total
+
+# ------------------- Send Mail -------------------
+def SendMail(receiver, logfile):
+
+    msg = EmailMessage()
+    msg["Subject"] = "Duplicate File Removal Report"
+    msg["From"] = SENDER_EMAIL
+    msg["To"] = receiver
+
+    msg.set_content("Duplicate file removal completed.\nPlease find attached log file.")
+
+    with open(logfile, "rb") as f:
+        data = f.read()
+
+    msg.add_attachment(data,
+                       maintype="application",
+                       subtype="octet-stream",
+                       filename=os.path.basename(logfile))
+
+    server = smtplib.SMTP("smtp.gmail.com",587)
+    server.starttls()
+    server.login(SENDER_EMAIL,SENDER_PASSWORD)
+    server.send_message(msg)
+    server.quit()
+
+# ------------------- Main Operation -------------------
+def DuplicateRemoval(directory, receiver):
+
+    start = datetime.now()
+
+    if not os.path.exists("Marvellous"):
+        os.mkdir("Marvellous")
+
+    logfile = os.path.join(
+        "Marvellous",
+        "DuplicateRemovalLog_" +
+        datetime.now().strftime("%d_%m_%Y_%H_%M_%S") +
+        ".log"
+    )
+
+    duplicate,totalfiles = FindDuplicates(directory)
+
+    deleted = 0
+    duplicatecount = 0
+
+    log = open(logfile,"w")
+
+    log.write("Duplicate File Removal Log\n")
+    log.write("="*50+"\n")
+    log.write("Start Time : "+str(start)+"\n")
+    log.write("Directory  : "+directory+"\n\n")
+
+    for checksum, files in duplicate.items():
+
+        if len(files)>1:
+            duplicatecount += len(files)-1
+
+            for file in files[1:]:
+
+                try:
+                    os.remove(file)
+                    deleted += 1
+
+                    log.write("Deleted : "+file+"\n")
+                    log.write("Checksum: "+checksum+"\n\n")
+
+                except Exception as e:
+                    log.write(str(e)+"\n")
+
+    end = datetime.now()
+
+    log.write("\n")
+    log.write("Completion Time : "+str(end)+"\n")
+    log.write("Total Files : "+str(totalfiles)+"\n")
+    log.write("Duplicate Found : "+str(duplicatecount)+"\n")
+    log.write("Deleted Files : "+str(deleted)+"\n")
+    log.close()
+
+    try:
+        SendMail(receiver, logfile)
+        print("Mail Sent Successfully")
+    except Exception as e:
+        print("Mail Error:",e)
+
+# ------------------- Main -------------------
+def main():
+
+    if len(sys.argv)==2:
+
+        if sys.argv[1] in ("--help","-h"):
+            Help()
+            return
+
+        if sys.argv[1] in ("--usage","-u"):
+            Usage()
+            return
+
+    if len(sys.argv)!=4:
+        Usage()
+        return
+
+    directory = sys.argv[1]
+    interval = int(sys.argv[2])
+    receiver = sys.argv[3]
+
+    if not os.path.isdir(directory):
+        print("Invalid Directory")
+        return
+
+    schedule.every(interval).minutes.do(DuplicateRemoval,directory,receiver)
+
+    DuplicateRemoval(directory,receiver)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+if __name__=="__main__":
+    main()
