@@ -1,0 +1,334 @@
+import os
+import sys
+import time
+import psutil
+import schedule
+import logging
+import smtplib
+from email.message import EmailMessage
+
+# ----------------------------------------------------------
+# Logging Configuration
+# ----------------------------------------------------------
+logging.basicConfig(
+    filename="Automation.log",
+    level=logging.INFO,
+    format="%(asctime)s : %(levelname)s : %(message)s"
+)
+
+# ----------------------------------------------------------
+# Process Scan
+# ----------------------------------------------------------
+def ProcessScan():
+
+    ProcessList = []
+
+    for proc in psutil.process_iter():
+
+        try:
+            info = proc.as_dict(attrs=["pid","name","username","status"])
+
+            info["cpu_percent"] = proc.cpu_percent(interval=None)
+            info["memory_percent"] = proc.memory_percent()
+
+            ProcessList.append(info)
+
+        except (psutil.NoSuchProcess,
+                psutil.AccessDenied,
+                psutil.ZombieProcess):
+            pass
+
+    return ProcessList
+
+
+# ----------------------------------------------------------
+# Search Process
+# ----------------------------------------------------------
+def SearchProcess(ProcessName):
+
+    flag = False
+
+    for proc in ProcessScan():
+
+        if proc["name"] is not None:
+
+            if proc["name"].lower() == ProcessName.lower():
+
+                print("-----------------------------------------")
+                print("Process Found")
+                print("-----------------------------------------")
+                print("Name      :", proc["name"])
+                print("PID       :", proc["pid"])
+                print("User      :", proc["username"])
+                print("Status    :", proc["status"])
+                print("CPU %     :", proc["cpu_percent"])
+                print("Memory %  :", proc["memory_percent"])
+                print("-----------------------------------------")
+
+                flag = True
+
+    if flag == False:
+        print("No such process is running")
+
+
+# ----------------------------------------------------------
+# Email Function
+# ----------------------------------------------------------
+def SendMail(receiver, filename):
+
+    sender = "pranali242197@gmail.com"
+
+    password = "vbxhzxcownfknokm"
+
+    try:
+
+        msg = EmailMessage()
+
+        msg["Subject"] = "Process Log File"
+        msg["From"] = sender
+        msg["To"] = receiver
+
+        msg.set_content("Attached Process Log File")
+
+        with open(filename, "rb") as f:
+
+            data = f.read()
+
+        msg.add_attachment(
+            data,
+            maintype="application",
+            subtype="octet-stream",
+            filename=os.path.basename(filename)
+        )
+
+        server = smtplib.SMTP("smtp.gmail.com",587)
+
+        server.starttls()
+
+        server.login(sender,password)
+
+        server.send_message(msg)
+
+        server.quit()
+
+        logging.info("Mail Sent Successfully")
+
+    except Exception as e:
+
+        logging.error(str(e))
+
+        # ----------------------------------------------------------
+# Platform Surveillance
+# ----------------------------------------------------------
+def PlatformSurveillance(FolderName):
+
+    Border = "-" * 60
+
+    try:
+
+        if os.path.exists(FolderName):
+
+            if os.path.isdir(FolderName) == False:
+
+                print("Path exists but it is not directory")
+                logging.error("Invalid directory")
+                return
+
+        else:
+
+            os.mkdir(FolderName)
+
+            logging.info("Directory created successfully")
+
+        TimeStamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+
+        FileName = os.path.join(
+            FolderName,
+            "Marvellous_%s.log" % TimeStamp
+        )
+
+        with open(FileName, "w") as fobj:
+
+            fobj.write(Border + "\n")
+            fobj.write("MARVELLOUS PLATFORM SURVEILLANCE SYSTEM\n")
+            fobj.write(Border + "\n")
+            fobj.write("Log Created At : " + TimeStamp + "\n")
+            fobj.write(Border + "\n\n")
+
+            # CPU Information
+
+            fobj.write("SYSTEM INFORMATION\n")
+            fobj.write(Border + "\n")
+
+            fobj.write("CPU Count : %s\n" % psutil.cpu_count())
+
+            fobj.write("CPU Usage : %.2f %%\n" % psutil.cpu_percent())
+
+            Memory = psutil.virtual_memory()
+
+            fobj.write("RAM Usage : %.2f %%\n" % Memory.percent)
+
+            fobj.write("Total RAM : %s Bytes\n" % Memory.total)
+
+            Net = psutil.net_io_counters()
+
+            fobj.write("Bytes Sent : %.2f MB\n" % (Net.bytes_sent/(1024*1024)))
+
+            fobj.write("Bytes Received : %.2f MB\n" % (Net.bytes_recv/(1024*1024)))
+
+            fobj.write(Border + "\n\n")
+
+            # Process Information
+
+            fobj.write("RUNNING PROCESS REPORT\n")
+            fobj.write(Border + "\n")
+
+            Data = ProcessScan()
+
+            for Process in Data:
+
+                fobj.write("PID : %s\n" % Process.get("pid"))
+
+                fobj.write("Name : %s\n" % Process.get("name"))
+
+                fobj.write("Username : %s\n" % Process.get("username"))
+
+                fobj.write("Status : %s\n" % Process.get("status"))
+
+                fobj.write("CPU Percentage : %.2f\n" % Process.get("cpu_percent"))
+
+                fobj.write("RAM Percentage : %.2f\n" % Process.get("memory_percent"))
+
+                fobj.write(Border + "\n")
+
+        logging.info("Log file created successfully")
+
+        print("Log File Created :", FileName)
+
+        return FileName
+
+    except Exception as e:
+
+        logging.error(str(e))
+
+        print("Error :", e)
+
+        # ----------------------------------------------------------
+# Main Function
+# ----------------------------------------------------------
+def main():
+
+    Border = "-" * 60
+
+    print(Border)
+    print("MARVELLOUS PLATFORM SURVEILLANCE SYSTEM")
+    print(Border)
+
+    # ------------------------------------------------------
+    # Help
+    # ------------------------------------------------------
+
+    if len(sys.argv) == 2:
+
+        if sys.argv[1] in ("-h", "--h"):
+
+            print("""Usage :python Automation.py <TimeInterval> <FolderName>""")
+            return
+
+        elif sys.argv[1] in ("-u", "--u"):
+
+            print("""Arguments :1 : Time Interval (Minutes) 2 : Folder Name
+
+3 : Search Process 4 : Email Log File""")
+            return
+
+        else:
+
+            print("Invalid Argument")
+            return
+
+    # ------------------------------------------------------
+    # Search Process
+    # ------------------------------------------------------
+
+    elif len(sys.argv) == 3:
+
+        if sys.argv[1].lower() == "search":
+
+            SearchProcess(sys.argv[2])
+
+            return
+
+        else:
+
+            try:
+
+                Interval = int(sys.argv[1])
+
+                if Interval <= 0:
+
+                    print("Invalid Time Interval")
+                    return
+
+                Folder = sys.argv[2]
+
+                print("Scheduler Started Successfully")
+
+                schedule.every(Interval).minutes.do(
+                    PlatformSurveillance,
+                    Folder
+                )
+
+                while True:
+
+                    schedule.run_pending()
+
+                    time.sleep(1)
+
+            except ValueError:
+
+                print("Time Interval should be Integer")
+
+            except KeyboardInterrupt:
+
+                print("\nScheduler Stopped")
+
+            except Exception as e:
+
+                logging.error(str(e))
+
+                print(e)
+
+    # ------------------------------------------------------
+    # Email Option
+    # ------------------------------------------------------
+
+    elif len(sys.argv) == 4:
+
+        if sys.argv[1].lower() == "email":
+
+            Folder = sys.argv[2]
+
+            Receiver = sys.argv[3]
+
+            FileName = PlatformSurveillance(Folder)
+
+            if FileName is not None:
+
+                SendMail(Receiver, FileName)
+
+                print("Mail Sent Successfully")
+
+        else:
+
+            print("Invalid Arguments")
+
+    else:
+        print("Invalid Number Of Arguments")
+
+    print(Border)
+    print("Thank You For Using Automation System")
+    print(Border)
+
+if __name__ == "__main__":
+    main()
