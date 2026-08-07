@@ -1,0 +1,226 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+
+# =========================
+# Load Dataset
+# =========================
+df = pd.read_csv("student_performance_ml.csv")
+
+print("Dataset:")
+print(df.head())
+
+# =========================
+# Features and Target
+# =========================
+X = df.drop("FinalResult", axis=1)
+y = df["FinalResult"]
+
+# Train-Test Split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# =========================
+# Train Decision Tree
+# =========================
+model = DecisionTreeClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+acc = accuracy_score(y_test, y_pred)
+
+print("\nOriginal Accuracy =", acc)
+
+# ===================================================
+# 1. Feature Importance
+# ===================================================
+print("\nFeature Importance")
+
+importance = pd.DataFrame({
+    "Feature": X.columns,
+    "Importance": model.feature_importances_
+})
+
+print(importance.sort_values(by="Importance", ascending=False))
+
+print("\nMost Important Feature:")
+print(importance.loc[importance.Importance.idxmax()])
+
+print("\nLeast Important Feature:")
+print(importance.loc[importance.Importance.idxmin()])
+
+
+# ===================================================
+# 2. Remove SleepHours
+# ===================================================
+print("\nTask 2")
+
+X2 = df.drop(["SleepHours", "FinalResult"], axis=1)
+
+X_train2, X_test2, y_train2, y_test2 = train_test_split(
+    X2, y, test_size=0.2, random_state=42
+)
+
+model2 = DecisionTreeClassifier(random_state=42)
+model2.fit(X_train2, y_train2)
+
+pred2 = model2.predict(X_test2)
+
+acc2 = accuracy_score(y_test2, pred2)
+
+print("Accuracy without SleepHours =", acc2)
+
+
+# ===================================================
+# 3. Train using only StudyHours and Attendance
+# ===================================================
+print("\nTask 3")
+
+X3 = df[["StudyHours", "Attendance"]]
+
+X_train3, X_test3, y_train3, y_test3 = train_test_split(
+    X3, y, test_size=0.2, random_state=42
+)
+
+model3 = DecisionTreeClassifier(random_state=42)
+model3.fit(X_train3, y_train3)
+
+pred3 = model3.predict(X_test3)
+
+acc3 = accuracy_score(y_test3, pred3)
+
+print("Accuracy using only StudyHours and Attendance =", acc3)
+
+
+# ===================================================
+# 4. Predict 5 New Students
+# ===================================================
+print("\nTask 4")
+
+new_students = pd.DataFrame({
+    "StudyHours":[2,4,6,7,8],
+    "Attendance":[60,75,85,90,95],
+    "PreviousScore":[45,60,72,80,90],
+    "AssignmentsCompleted":[2,4,6,8,10],
+    "SleepHours":[5,6,7,7,8]
+})
+
+prediction = model.predict(new_students)
+
+new_students["Prediction"] = prediction
+
+new_students["Prediction"] = new_students["Prediction"].map({
+    1:"Pass",
+    0:"Fail"
+})
+
+print(new_students)
+
+
+# ===================================================
+# 5. Manual Accuracy
+# ===================================================
+print("\nTask 5")
+
+correct = (y_test == y_pred).sum()
+manual_accuracy = correct / len(y_test)
+
+print("Manual Accuracy =", manual_accuracy)
+print("Sklearn Accuracy =", acc)
+
+
+# ===================================================
+# 6. Misclassified Students
+# ===================================================
+print("\nTask 6")
+
+wrong = X_test.copy()
+wrong["Actual"] = y_test
+wrong["Predicted"] = y_pred
+
+misclassified = wrong[wrong["Actual"] != wrong["Predicted"]]
+
+print(misclassified)
+
+print("Total Misclassified =", len(misclassified))
+
+
+# ===================================================
+# 7. Different Random States
+# ===================================================
+print("\nTask 7")
+
+for rs in [0,10,42]:
+
+    X_train,X_test,y_train,y_test=train_test_split(
+        X,y,test_size=0.2,random_state=rs
+    )
+
+    m=DecisionTreeClassifier(random_state=rs)
+    m.fit(X_train,y_train)
+
+    pred=m.predict(X_test)
+
+    print("Random State =",rs,
+          "Accuracy =",accuracy_score(y_test,pred))
+
+
+# ===================================================
+# 8. Decision Tree Visualization
+# ===================================================
+print("\nTask 8")
+
+plt.figure(figsize=(14,8))
+
+plot_tree(
+    model,
+    feature_names=X.columns,
+    class_names=["Fail","Pass"],
+    filled=True
+)
+plt.show()
+
+
+# ===================================================
+# 9. Performance Index
+# ===================================================
+print("\nTask 9")
+
+df["PerformanceIndex"]=(df["StudyHours"]*2)+df["Attendance"]
+
+X4=df.drop("FinalResult",axis=1)
+
+X_train4,X_test4,y_train4,y_test4=train_test_split(
+    X4,y,test_size=0.2,random_state=42
+)
+
+model4=DecisionTreeClassifier(random_state=42)
+model4.fit(X_train4,y_train4)
+
+pred4=model4.predict(X_test4)
+
+print("Accuracy with PerformanceIndex =",
+      accuracy_score(y_test4,pred4))
+
+
+# ===================================================
+# 10. max_depth=None
+# ===================================================
+print("\nTask 10")
+
+model5=DecisionTreeClassifier(max_depth=None,random_state=42)
+
+model5.fit(X_train,y_train)
+
+train_acc=accuracy_score(y_train,model5.predict(X_train))
+test_acc=accuracy_score(y_test,model5.predict(X_test))
+
+print("Training Accuracy =",train_acc)
+print("Testing Accuracy =",test_acc)
+
+if train_acc==1.0 and test_acc<train_acc:
+    print("\nOverfitting detected.")
