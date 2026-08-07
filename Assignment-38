@@ -1,0 +1,201 @@
+# ============================================================
+# Student Performance ML Assignment
+# File: student_performance_assignment.py
+# ============================================================
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ------------------------------------------------------------
+# 1. Load Dataset
+# ------------------------------------------------------------
+df = pd.read_csv("student_performance_ml.csv")
+
+print("=" * 60)
+print("FIRST 5 RECORDS")
+print(df.head())
+
+print("\n" + "=" * 60)
+print("LAST 5 RECORDS")
+print(df.tail())
+
+print("\n" + "=" * 60)
+print("TOTAL ROWS AND COLUMNS")
+print("Rows :", df.shape[0])
+print("Columns :", df.shape[1])
+
+print("\n" + "=" * 60)
+print("COLUMN NAMES")
+print(df.columns.tolist())
+
+print("\n" + "=" * 60)
+print("DATA TYPES")
+print(df.dtypes)
+
+# ------------------------------------------------------------
+# 2. Total Students, Passed, Failed
+# ------------------------------------------------------------
+print("\n" + "=" * 60)
+
+total_students = len(df)
+passed = (df["FinalResult"] == 1).sum()
+failed = (df["FinalResult"] == 0).sum()
+
+print("Total Students :", total_students)
+print("Passed Students :", passed)
+print("Failed Students :", failed)
+
+# ------------------------------------------------------------
+# 3. Calculate Average/Maximum/Minimum
+# ------------------------------------------------------------
+print("\n" + "=" * 60)
+
+print("Average StudyHours :", df["StudyHours"].mean())
+print("Average Attendance :", df["Attendance"].mean())
+print("Maximum PreviousScore :", df["PreviousScore"].max())
+print("Minimum SleepHours :", df["SleepHours"].min())
+
+# ------------------------------------------------------------
+# 4. Value Counts and Percentage
+# ------------------------------------------------------------
+print("\n" + "=" * 60)
+
+counts = df["FinalResult"].value_counts()
+print("Value Counts")
+print(counts)
+
+percentage = df["FinalResult"].value_counts(normalize=True) * 100
+
+pass_percent = percentage.get(1, 0)
+fail_percent = percentage.get(0, 0)
+
+print("\nPass Percentage : {:.2f}%".format(pass_percent))
+print("Fail Percentage : {:.2f}%".format(fail_percent))
+
+if abs(pass_percent - fail_percent) <= 10:
+    print("Dataset is Balanced.")
+else:
+    print("Dataset is Not Balanced.")
+
+# ------------------------------------------------------------
+# 5. Analysis
+# ------------------------------------------------------------
+print("\n" + "=" * 60)
+
+study_result = df.groupby("FinalResult")["StudyHours"].mean()
+attendance_result = df.groupby("FinalResult")["Attendance"].mean()
+
+print("Average StudyHours")
+print(study_result)
+
+print("\nAverage Attendance")
+print(attendance_result)
+
+print("\nObservations:")
+print("1. Students with higher StudyHours generally perform better.")
+print("2. Higher Attendance improves the chance of passing.")
+print("3. Students with lower attendance are more likely to fail.")
+print("4. StudyHours and Attendance both influence FinalResult.")
+
+# ------------------------------------------------------------
+# 6. Histogram of StudyHours
+# ------------------------------------------------------------
+plt.figure(figsize=(6,4))
+plt.hist(df["StudyHours"], bins=8)
+plt.title("Histogram of StudyHours")
+plt.xlabel("Study Hours")
+plt.ylabel("Frequency")
+plt.grid(True)
+plt.show()
+
+print("\nHistogram Observation:")
+print("The histogram shows how StudyHours are distributed among students.")
+
+# ------------------------------------------------------------
+# 7. Scatter Plot
+# ------------------------------------------------------------
+plt.figure(figsize=(6,4))
+
+pass_data = df[df["FinalResult"] == 1]
+fail_data = df[df["FinalResult"] == 0]
+
+plt.scatter(pass_data["StudyHours"],
+            pass_data["PreviousScore"],
+            color="green",
+            label="Pass")
+
+plt.scatter(fail_data["StudyHours"],
+            fail_data["PreviousScore"],
+            color="red",
+            label="Fail")
+
+plt.title("StudyHours vs PreviousScore")
+plt.xlabel("StudyHours")
+plt.ylabel("PreviousScore")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# ------------------------------------------------------------
+# 8. Boxplot for Attendance
+# ------------------------------------------------------------
+plt.figure(figsize=(6,4))
+plt.boxplot(df["Attendance"])
+plt.title("Attendance Boxplot")
+plt.ylabel("Attendance")
+plt.grid(True)
+plt.show()
+
+print("\nCheck the boxplot to identify any outliers.")
+
+# ------------------------------------------------------------
+# 9. AssignmentsCompleted vs FinalResult
+# ------------------------------------------------------------
+plt.figure(figsize=(6,4))
+
+plt.scatter(pass_data["AssignmentsCompleted"],
+            pass_data["FinalResult"],
+            color="green",
+            label="Pass")
+
+plt.scatter(fail_data["AssignmentsCompleted"],
+            fail_data["FinalResult"],
+            color="red",
+            label="Fail")
+
+plt.title("AssignmentsCompleted vs FinalResult")
+plt.xlabel("Assignments Completed")
+plt.ylabel("FinalResult")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print("\nObservation:")
+print("Students completing more assignments generally have a higher chance of passing.")
+
+# ------------------------------------------------------------
+# 10. SleepHours vs FinalResult
+# ------------------------------------------------------------
+plt.figure(figsize=(6,4))
+
+plt.scatter(pass_data["SleepHours"],
+            pass_data["FinalResult"],
+            color="green",
+            label="Pass")
+
+plt.scatter(fail_data["SleepHours"],
+            fail_data["FinalResult"],
+            color="red",
+            label="Fail")
+
+plt.title("SleepHours vs FinalResult")
+plt.xlabel("SleepHours")
+plt.ylabel("FinalResult")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print("\nObservation:")
+print("Adequate sleep is beneficial, but sleeping more alone does not guarantee success.")
+
+print("\nAssignment Completed Successfully.")
