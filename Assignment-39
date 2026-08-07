@@ -1,0 +1,275 @@
+# ==========================================================
+# Student Performance ML Dataset - Decision Tree Assignment
+# ==========================================================
+
+# Import Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
+
+# ==========================================================
+# Step 1 : Load Dataset
+# ==========================================================
+
+df = pd.read_csv("student_performance_ml.csv")
+
+print("=" * 60)
+print("First 5 Records")
+print(df.head())
+
+print("=" * 60)
+print("Last 5 Records")
+print(df.tail())
+
+print("=" * 60)
+print("Dataset Shape")
+print(df.shape)
+
+print("=" * 60)
+print("Column Names")
+print(df.columns)
+
+print("=" * 60)
+print("Data Types")
+print(df.dtypes)
+
+# ==========================================================
+# Step 2 : Basic Analysis
+# ==========================================================
+
+print("=" * 60)
+print("Total Students :", len(df))
+
+print("Passed Students :", (df["FinalResult"] == 1).sum())
+
+print("Failed Students :", (df["FinalResult"] == 0).sum())
+
+print("=" * 60)
+print("Average Study Hours :", df["StudyHours"].mean())
+
+print("Average Attendance :", df["Attendance"].mean())
+
+print("Maximum Previous Score :", df["PreviousScore"].max())
+
+print("Minimum Sleep Hours :", df["SleepHours"].min())
+
+print("=" * 60)
+print("Final Result Distribution")
+
+print(df["FinalResult"].value_counts())
+
+print("=" * 60)
+print("Pass / Fail Percentage")
+
+print(df["FinalResult"].value_counts(normalize=True) * 100)
+
+# ==========================================================
+# Step 3 : Visualization
+# ==========================================================
+
+# Histogram
+plt.figure(figsize=(6,4))
+plt.hist(df["StudyHours"], bins=10)
+plt.title("Histogram of StudyHours")
+plt.xlabel("StudyHours")
+plt.ylabel("Frequency")
+plt.show()
+
+# Scatter Plot
+plt.figure(figsize=(6,4))
+
+pass_students = df[df["FinalResult"] == 1]
+fail_students = df[df["FinalResult"] == 0]
+
+plt.scatter(pass_students["StudyHours"],
+            pass_students["PreviousScore"],
+            label="Pass")
+
+plt.scatter(fail_students["StudyHours"],
+            fail_students["PreviousScore"],
+            label="Fail")
+
+plt.xlabel("StudyHours")
+plt.ylabel("PreviousScore")
+plt.title("StudyHours vs PreviousScore")
+plt.legend()
+
+plt.show()
+
+# Boxplot
+plt.figure(figsize=(5,4))
+plt.boxplot(df["Attendance"])
+plt.title("Attendance Boxplot")
+plt.show()
+
+# AssignmentsCompleted vs FinalResult
+plt.figure(figsize=(6,4))
+plt.scatter(df["AssignmentsCompleted"],
+            df["FinalResult"])
+
+plt.xlabel("AssignmentsCompleted")
+plt.ylabel("FinalResult")
+plt.title("AssignmentsCompleted vs FinalResult")
+plt.show()
+
+# SleepHours vs FinalResult
+plt.figure(figsize=(6,4))
+plt.scatter(df["SleepHours"],
+            df["FinalResult"])
+
+plt.xlabel("SleepHours")
+plt.ylabel("FinalResult")
+plt.title("SleepHours vs FinalResult")
+plt.show()
+
+# ==========================================================
+# Step 4 : Prepare Data
+# ==========================================================
+
+X = df[[
+    "StudyHours",
+    "Attendance",
+    "PreviousScore",
+    "AssignmentsCompleted",
+    "SleepHours"
+]]
+
+Y = df["FinalResult"]
+
+X_train, X_test, Y_train, Y_test = train_test_split(
+    X,
+    Y,
+    test_size=0.2,
+    random_state=42
+)
+
+# ==========================================================
+# Step 5 : Train Decision Tree
+# ==========================================================
+
+model = DecisionTreeClassifier(random_state=42)
+
+model.fit(X_train, Y_train)
+
+print("=" * 60)
+print("Decision Tree Model Trained Successfully")
+
+# ==========================================================
+# Step 6 : Prediction
+# ==========================================================
+
+Y_pred = model.predict(X_test)
+
+print("=" * 60)
+print("Actual\tPredicted")
+
+for actual, pred in zip(Y_test, Y_pred):
+    print(actual, "\t", pred)
+
+# ==========================================================
+# Step 7 : Accuracy
+# ==========================================================
+
+train_accuracy = model.score(X_train, Y_train)
+
+test_accuracy = model.score(X_test, Y_test)
+
+print("=" * 60)
+print("Training Accuracy : {:.2f}%".format(train_accuracy * 100))
+
+print("Testing Accuracy : {:.2f}%".format(test_accuracy * 100))
+
+accuracy = accuracy_score(Y_test, Y_pred)
+
+print("Overall Accuracy : {:.2f}%".format(accuracy * 100))
+
+# ==========================================================
+# Step 8 : Confusion Matrix
+# ==========================================================
+
+cm = confusion_matrix(Y_test, Y_pred)
+
+print("=" * 60)
+print("Confusion Matrix")
+print(cm)
+
+disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+
+disp.plot()
+
+plt.show()
+
+TN = cm[0][0]
+FP = cm[0][1]
+FN = cm[1][0]
+TP = cm[1][1]
+
+print("=" * 60)
+print("True Positive :", TP)
+print("True Negative :", TN)
+print("False Positive :", FP)
+print("False Negative :", FN)
+
+# ==========================================================
+# Step 9 : Compare Different Depths
+# ==========================================================
+
+print("=" * 60)
+print("Decision Tree Comparison")
+
+depths = [1, 3, None]
+
+for d in depths:
+
+    tree = DecisionTreeClassifier(
+        max_depth=d,
+        random_state=42
+    )
+
+    tree.fit(X_train, Y_train)
+
+    prediction = tree.predict(X_test)
+
+    acc = accuracy_score(Y_test, prediction)
+
+    print("Max Depth =", d)
+
+    print("Testing Accuracy = {:.2f}%".format(acc * 100))
+
+    print("-" * 30)
+
+# ==========================================================
+# Step 10 : Predict New Student
+# ==========================================================
+
+student = [[6, 85, 66, 7, 7]]
+
+result = model.predict(student)
+
+print("=" * 60)
+
+if result[0] == 1:
+    print("Prediction : PASS")
+else:
+    print("Prediction : FAIL")
+
+# ==========================================================
+# Step 11 : Final Conclusion
+# ==========================================================
+
+print("=" * 60)
+
+if train_accuracy > test_accuracy + 0.10:
+    print("Model may be Overfitting.")
+elif train_accuracy < 0.70 and test_accuracy < 0.70:
+    print("Model may be Underfitting.")
+else:
+    print("Model performance is Good.")
+
+print("=" * 60)
+print("Program Completed Successfully")
