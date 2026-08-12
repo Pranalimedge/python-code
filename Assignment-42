@@ -1,0 +1,161 @@
+import math
+# =====================================================
+# ASSIGNMENT 1 : MANUAL KNN
+# =====================================================
+
+print("=" * 40)
+print("ASSIGNMENT 1 : MANUAL KNN")
+print("=" * 40)
+
+# Dataset
+data = [
+    [1, 2, "Red"],
+    [2, 3, "Red"],
+    [3, 1, "Blue"],
+    [6, 5, "Blue"]
+]
+
+x = float(input("Enter X coordinate: "))
+y = float(input("Enter Y coordinate: "))
+
+# Calculate distances
+distances = []
+
+for point in data:
+    d = math.sqrt((x - point[0]) ** 2 + (y - point[1]) ** 2)
+    distances.append([d, point[2]])
+
+# Sort distances
+distances.sort()
+
+# K = 3
+print("\nNearest Neighbors:")
+
+for i in range(3):
+    print(
+        data[i] if False else
+        "Distance:", round(distances[i][0], 2),
+        "Class:", distances[i][1]
+    )
+
+# Majority voting
+red = 0
+blue = 0
+
+for i in range(3):
+    if distances[i][1] == "Red":
+        red += 1
+    else:
+        blue += 1
+
+if red > blue:
+    result = "Red"
+else:
+    result = "Blue"
+
+print("\nPredicted Class:", result)
+
+
+# =====================================================
+# ASSIGNMENT 2 : EFFECT OF K
+# =====================================================
+
+print("\n")
+print("=" * 40)
+print("ASSIGNMENT 2 : EFFECT OF K")
+print("=" * 40)
+
+x = float(input("Enter X coordinate: "))
+y = float(input("Enter Y coordinate: "))
+
+distances = []
+
+for point in data:
+    d = math.sqrt((x - point[0]) ** 2 + (y - point[1]) ** 2)
+    distances.append([d, point[2]])
+
+distances.sort()
+
+print("\nPrediction Results")
+
+# K = 1
+if distances[0][1] == "Red":
+    print("K = 1 -> Red")
+else:
+    print("K = 1 -> Blue")
+
+
+# K = 3
+red = 0
+blue = 0
+
+for i in range(3):
+    if distances[i][1] == "Red":
+        red += 1
+    else:
+        blue += 1
+
+if red > blue:
+    print("K = 3 -> Red")
+else:
+    print("K = 3 -> Blue")
+
+
+# K = 5
+print("K = 5 -> Not possible")
+print("(Dataset contains only 4 points)")
+
+
+# =====================================================
+# ASSIGNMENT 3 : STUDENT PASS / FAIL
+# =====================================================
+
+print("\n")
+print("=" * 40)
+print("ASSIGNMENT 3 : STUDENT PASS / FAIL")
+print("=" * 40)
+
+# Dataset
+students = [
+    [2, 60, "Fail"],
+    [5, 80, "Pass"],
+    [6, 85, "Pass"],
+    [1, 50, "Fail"]
+]
+
+study = float(input("Enter Study Hours: "))
+attendance = float(input("Enter Attendance: "))
+
+distances = []
+
+# Calculate distance
+for student in students:
+
+    d = math.sqrt(
+        (study - student[0]) ** 2 +
+        (attendance - student[1]) ** 2
+    )
+
+    distances.append([d, student[2]])
+
+# Sort
+distances.sort()
+
+# K = 3
+passed = 0
+failed = 0
+
+for i in range(3):
+
+    if distances[i][1] == "Pass":
+        passed += 1
+    else:
+        failed += 1
+
+# Prediction
+if passed > failed:
+    result = "Pass"
+else:
+    result = "Fail"
+
+print("\nPredicted Result:", result)
