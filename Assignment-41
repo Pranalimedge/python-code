@@ -1,0 +1,232 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.preprocessing import StandardScaler
+
+
+def marclassifier(datapath):
+
+    border = "-" * 40
+
+    # =========================================================
+    # STEP 1: GET DATA
+    # =========================================================
+
+    print(border)
+    print("STEP 1: GET DATA")
+    print(border)
+
+    df = pd.read_csv(datapath)
+
+    print("Dataset loaded successfully")
+    print(border)
+
+    print("Some entries from dataset:")
+    print(df.head())
+
+    print(border)
+    print("Shape of dataset:", df.shape)
+    print("Total records:", df.shape[0])
+    print("Total columns:", df.shape[1])
+
+    # =========================================================
+    # STEP 2: CLEAN, PREPARE AND MANIPULATE DATA
+    # =========================================================
+
+    print(border)
+    print("STEP 2: CLEAN, PREPARE AND MANIPULATE DATA")
+    print(border)
+
+    # Remove missing values
+    df.dropna(inplace=True)
+
+    print("Missing values removed")
+    print("Shape after cleaning:", df.shape)
+
+    print(border)
+
+    # =========================================================
+    # STEP 3: SEPARATE INPUT AND OUTPUT
+    # =========================================================
+
+    print(border)
+    print("STEP 3: SEPARATE INPUT AND OUTPUT")
+    print(border)
+
+    x = df.drop(columns=["Class"])
+    y = df["Class"]
+
+    print("Input columns:")
+    print(x.columns.to_list())
+
+    print(border)
+
+    print("Shape of X:", x.shape)
+    print("Shape of Y:", y.shape)
+
+    print("Output column: Class")
+
+    # =========================================================
+    # STEP 4: TRAIN AND TEST DATA
+    # =========================================================
+
+    print(border)
+    print("STEP 4: TRAIN AND TEST DATA")
+    print(border)
+
+    x_train, x_test, y_train, y_test = train_test_split(
+        x,
+        y,
+        test_size=0.5,
+        random_state=42,
+        stratify=y
+    )
+
+    print("Training data:")
+    print("X_train:", x_train.shape)
+    print("Y_train:", y_train.shape)
+
+    print(border)
+
+    print("Testing data:")
+    print("X_test:", x_test.shape)
+    print("Y_test:", y_test.shape)
+
+    # =========================================================
+    # FEATURE SCALING
+    # =========================================================
+
+    print(border)
+    print("FEATURE SCALING")
+    print(border)
+
+    scalar = StandardScaler()
+
+    x_train_scaled = scalar.fit_transform(x_train)
+
+    # Use the same scaler for test data
+    x_test_scaled = scalar.transform(x_test)
+
+    print("Feature scaling completed")
+
+    # =========================================================
+    # STEP 5: TRAIN MODEL AND CALCULATE ACCURACY
+    # =========================================================
+
+    print(border)
+    print("STEP 5: TRAIN MODEL")
+    print(border)
+
+    model = KNeighborsClassifier(n_neighbors=5)
+
+    model.fit(x_train_scaled, y_train)
+
+    print("Model training completed")
+
+    # Predict test data
+    y_pred = model.predict(x_test_scaled)
+
+    print(border)
+    print("Predicted values:")
+    print(y_pred)
+
+    print(border)
+    print("Actual values:")
+    print(y_test.to_list())
+
+    # Calculate accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+
+    print(border)
+    print("ACCURACY")
+    print(border)
+
+    print("Accuracy:", accuracy)
+    print("Accuracy percentage:", accuracy * 100, "%")
+
+    # =========================================================
+    # CONFUSION MATRIX
+    # =========================================================
+
+    print(border)
+    print("CONFUSION MATRIX")
+    print(border)
+
+    cm = confusion_matrix(y_test, y_pred)
+
+    print(cm)
+
+    # =========================================================
+    # STEP 6: HYPERPARAMETER TUNING
+    # =========================================================
+
+    print(border)
+    print("STEP 6: HYPERPARAMETER TUNING")
+    print(border)
+
+    accuracy_values = []
+    k_values = range(1, 21)
+
+    for k in k_values:
+
+        model = KNeighborsClassifier(n_neighbors=k)
+
+        model.fit(x_train_scaled, y_train)
+
+        y_pred = model.predict(x_test_scaled)
+
+        accuracy = accuracy_score(y_test, y_pred)
+
+        accuracy_values.append(accuracy)
+
+        print("K =", k, "Accuracy =", accuracy)
+
+    # =========================================================
+    # BEST K VALUE
+    # =========================================================
+
+    print(border)
+    print("BEST K VALUE")
+    print(border)
+
+    best_accuracy = max(accuracy_values)
+
+    best_k = list(k_values)[accuracy_values.index(best_accuracy)]
+
+    print("Best K value:", best_k)
+    print("Best Accuracy:", best_accuracy)
+    print("Best Accuracy Percentage:", best_accuracy * 100, "%")
+
+    # =========================================================
+    # GRAPHICAL REPRESENTATION
+    # =========================================================
+
+    print(border)
+    print("GRAPHICAL REPRESENTATION")
+    print(border)
+
+    plt.figure(figsize=(8, 5))
+
+    plt.plot(
+        k_values,
+        accuracy_values,
+        marker="o"
+    )
+
+    plt.title("K Values vs Accuracy")
+    plt.xlabel("Value of K")
+    plt.ylabel("Accuracy")
+    plt.grid(True)
+
+    plt.show()
+
+def main():
+
+    marclassifier("WinePredictor.csv")
+
+
+if __name__ == "__main__":
+    main()
